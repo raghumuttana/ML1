@@ -1,3 +1,9 @@
+
+Download test data from
+
+https://raw.githubusercontent.com/mezmicrosoft/Microsoft_R_Server/master/Flight_Delay_Prediction/Flight%20Delays%20Data.zip
+
+
 Classification Algorithms:
 
 Naive Bayes
