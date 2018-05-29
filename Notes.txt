@@ -1,0 +1,33 @@
+Classification Algorithms:
+
+Naive Bayes
+Support Vector Machines
+Decission Trees
+K-Nearest Neighbors
+Random Forests
+Logistic Regression
+
+
+Steps:
+
+1. Problem Statement (Determine Gender based on Name)
+2. Features. In this step we identify a characteristic and assign a numerical value. 
+	2.1. Last letter is vowel/consonant (0/1)
+	2.2. Number of characters 
+	2.3. Presense of prefixes/suffuxes common to a gender (Ms/Mr/Mrs/Smt/Sri)
+	2.4. A lot of thought needs to go into what kind of features we need to use. Getting this right need trial and error sometimes.
+3. Training - feed to algorithm.
+4. Test
+
+
+--Term frequency Representation
+
+
+Datasets:
+
+http://archive.ics.uci.edu/ml/datasets/sentiment+labelled+sentences
+
+Improving model:
+Larger dataset
+Different Pipeline: Different learner, different transform, different hyperparameters
+
