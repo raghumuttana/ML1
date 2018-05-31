@@ -9,9 +9,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestData", "TestData", "{F8E518E7-1764-42B7-A555-FFA559CC52EC}"
 	ProjectSection(SolutionItems) = preProject
+		TestData\April2017.csv = TestData\April2017.csv
 		TestData\Flight Delays Data.csv = TestData\Flight Delays Data.csv
-		TestData\Flight Delays Data.zip = TestData\Flight Delays Data.zip
-		TestData\Test.csv = TestData\Test.csv
+		TestData\March2017.csv = TestData\March2017.csv
+		TestData\Sept2017.csv = TestData\Sept2017.csv
 	EndProjectSection
 EndProject
 Global

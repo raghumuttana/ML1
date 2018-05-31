@@ -25,7 +25,7 @@ namespace ConsoleApp1
 
                 var pipeline = new LearningPipeline();
                 pipeline.Add(new TextLoader<FlightData>(_dataPath, useHeader: true, separator: ","));
-                pipeline.Add(new ColumnCopier(("ArrDelay", "Label")));
+                pipeline.Add(new ColumnCopier(("DepDel15", "Label")));
                 pipeline.Add(new MissingValuesRowDropper()
                 {
                     Column = new string[]
@@ -51,20 +51,21 @@ namespace ConsoleApp1
                          "Month",
                          "DayofMonth",
                          "DayOfWeek",
-                         "Carrier",
+                      //   "Carrier",
                          "OriginAirportID",
-                         "DestAirportID",
-                         "CRSDepTime"
+                         "DestAirportID"//,
+                         //"CRSDepTime"
                          ));
 
                 pipeline.Add(new ColumnConcatenator("Features",                       
                          "Month",
                          "DayofMonth",
                          "DayOfWeek",
-                         "Carrier",
+                         //"Carrier",
                          "OriginAirportID",
-                         "DestAirportID",                        
-                         "DepDelay"
+                         "DestAirportID"//,
+                          //"CRSDepTime"
+                         //"DepDelay"
                          ));
 
                 pipeline.Add(new FastTreeBinaryClassifier()
@@ -76,32 +77,55 @@ namespace ConsoleApp1
 
                 model.WriteAsync(_modelPath);
 
-                var testData = new TextLoader<FlightData>(_evaluatePath, useHeader: true, separator: ",");
+                var testData = new TextLoader<FlightData>(_dataPath, useHeader: true, separator: ",");
                 var evaluator = new BinaryClassificationEvaluator();
                 BinaryClassificationMetrics metrics = evaluator.Evaluate(model, testData);
                 //model.Predict(new FlightData() { })
                 model.WriteAsync(_modelPath);
 
-                var prediction = model.Predict(new FlightData()
-                { //2013,6,30,7,AA,13930,10721,1855,64.00,1.00,2215,45.00,1.00,0.00
 
-                    Year = "2013", 
-                     Month = "6",
-                     DayofMonth = "30",
-                     DayOfWeek = "7",
-                     Carrier = "AA",
-                     OriginAirportID = "13930",
-                     DestAirportID = "10721",
-                     CRSDepTime = "1855",
-                     DepDelay =64.00f,
-                     DepDel15 = 1.00f,
-                     CRSArrTime = 2215,
-                     ArrDel15 = 1.00f,
-                     Cancelled = 0.00f
+                var testRows = System.IO.File.ReadAllLines(_dataPath);
 
+                foreach (var testRow in testRows)
+                {
+                    var objects = testRow.Split(",");
+                    var obj = new FlightData()
+                    {
+                        Month = objects[1],
+                        DayofMonth = objects[2],
+                        DayOfWeek = objects[3],
+                        OriginAirportID = objects[5],
+                        DestAirportID = objects[6],
+                        CRSDepTime = objects[7]
+                    };
+
+                    var prediction = model.Predict(obj);
+
+                    if (prediction.DepDel15 != 0)
+                        Console.WriteLine("Predicted DepartureDelay is: {0}", prediction.DepDel15);
                 }
-                );
-                Console.WriteLine("Predicted ArrDelay is: {0}, actual fare: -14.00", prediction.ArrDelay);
+
+
+                //var prediction = model.Predict(new FlightData()
+                //{ //2013,6,30,7,AA,13930,10721,1855,64.00,1.00,2215,45.00,1.00,0.00
+
+                //    Year = "2013", 
+                //     Month = "6",
+                //     DayofMonth = "30",
+                //     DayOfWeek = "7",
+                //     Carrier = "AA",
+                //     OriginAirportID = "13930",
+                //     DestAirportID = "10721",
+                //     CRSDepTime = "1855",
+                //     DepDelay =64.00f,
+                //     //DepDel15 = 1.00f,
+                //     CRSArrTime = 2215,
+                //     ArrDel15 = 1.00f,
+                //     Cancelled = 0.00f
+
+                //}
+                //);
+                //Console.WriteLine("Predicted DepartureDelay is: {0}", prediction.DepDel15);
 
             }
             catch (Exception ex)
@@ -115,7 +139,7 @@ namespace ConsoleApp1
     public class FlightDelayPredictor
     {
         [Column("Score")]
-        public float ArrDelay;
+        public float DepDel15;
     }
 
     public class FlightData
